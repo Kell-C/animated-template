@@ -1,27 +1,28 @@
 <?php
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Pegando dados do formulário
-    $name = htmlspecialchars(trim($_POST['name']));
-    $email = filter_var(trim($_POST['email']), FILTER_SANITIZE_EMAIL);
-    $message = htmlspecialchars(trim($_POST['message']));
+    // Captura dos dados do formulário
+    $name = htmlspecialchars($_POST['full_name']);
+    $email = htmlspecialchars($_POST['email']);
+    $message = htmlspecialchars($_POST['message']);
 
-    // Definindo destinatário e assunto
-    $to = "kcristhianesilva.dev@gmail.com"; // Substitua pelo seu e-mail
-    $subject = "Nova mensagem do formulário de contato";
+    // Definição do email de destino
+    $to = "kcristhianesilva.dev@gmail.com"; // Substitua pelo seu endereço de email
+    $subject = "Nova mensagem de $name";
 
-    // Corpo do e-mail
-    $email_body = "Nome: $name\n";
-    $email_body .= "Email: $email\n\n";
-    $email_body .= "Mensagem:\n$message\n";
+    // Corpo do email
+    $body = "Nome: $name\n";
+    $body .= "Email: $email\n\n";
+    $body .= "Mensagem:\n$message\n";
 
-    // Cabeçalhos
-    $headers = "From: $email";
+    // Cabeçalhos do email
+    $headers = "From: $email\r\n";
+    $headers .= "Reply-To: $email\r\n";
 
-    // Enviando o e-mail
-    if (mail($to, $subject, $email_body, $headers)) {
-        echo "Mensagem enviada com sucesso!";
+    // Envio do email
+    if (mail($to, $subject, $body, $headers)) {
+        echo "<script>alert('Mensagem enviada com sucesso!');</script>";
     } else {
-        echo "Erro ao enviar mensagem. Tente novamente mais tarde.";
+        echo "<script>alert('Erro ao enviar a mensagem. Tente novamente mais tarde.');</script>";
     }
 }
 ?>
